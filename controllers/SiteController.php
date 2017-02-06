@@ -168,11 +168,16 @@ class SiteController extends Controller
 
         $comments = $comments->offset($pagination->offset)->limit($pagination->limit)->all();
 
+        $cookies = Yii::$app->request->cookies;
+
+
+
         return $this->render('comments',
                 [
                 'comments' => $comments,
                 'pagination' => $pagination,
-                'name' => Yii::$app->session->get('name')
+                'namess' => Yii::$app->session->get('names'),
+                'namecc' => $cookies->getValue('namec')
                 ]
             );
     }
@@ -182,14 +187,23 @@ class SiteController extends Controller
     {
         $name = Yii::$app->request->get('name', 'user не найден');
 
+        
         $session = Yii::$app->session;
+       $cookies = Yii::$app->response->cookies;
 
-        $session->set('name', $name);
+        $session->set('names', $name);
+       $cookies->add(new \yii\web\Cookie([
+            'name' => 'namec',
+            'value'=> $name
+        ]));
 
-        //$session->remove();
+       
 
             return $this->render('user',
-            ['name' => $name]
+            [
+            'namess' => $name,
+            'namecc' => $name
+            ]
         );        
     }
 
