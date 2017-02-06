@@ -171,7 +171,8 @@ class SiteController extends Controller
         return $this->render('comments',
                 [
                 'comments' => $comments,
-                'pagination' => $pagination
+                'pagination' => $pagination,
+                'name' => Yii::$app->session->get('name')
                 ]
             );
     }
@@ -180,6 +181,13 @@ class SiteController extends Controller
     public function actionUser()
     {
         $name = Yii::$app->request->get('name', 'user не найден');
+
+        $session = Yii::$app->session;
+
+        $session->set('name', $name);
+
+        //$session->remove();
+
             return $this->render('user',
             ['name' => $name]
         );        
